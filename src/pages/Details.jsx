@@ -13,6 +13,11 @@ export default function Details() {
   const id = searchParams.get('id') || '1';
   const destination = MOCK_DESTINATIONS.find(item => String(item.id) === String(id)) || MOCK_DESTINATIONS[0];
 
+  // Force scroll to top instantly when this details page loads or changes destination ID
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [id]);
+
   // Guests tracked as a string to allow clearing/backspacing on mobile
   const [guests, setGuests] = useState('1');
   const numericGuests = Math.max(1, parseInt(guests) || 1);
