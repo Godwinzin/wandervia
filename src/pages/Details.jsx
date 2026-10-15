@@ -151,9 +151,15 @@ export default function Details() {
         {/* Destination Information & Gallery */}
         <div>
           <h1>{destination.title}</h1>
-          <p style={{ color: 'var(--gray)', marginBottom: '1rem' }}>
-            {destination.location} • ★ {destination.rating}
-          </p>
+          
+          {/* Catchy Rating Badge Header (Review Count Removed) */}
+          <div className="details-subtitle">
+            <span style={{ color: 'var(--gray)' }}>{destination.location}</span>
+            <span>•</span>
+            <span className="rating-badge">
+              ★ {destination.rating}
+            </span>
+          </div>
           
           <div className="gallery">
             <img src={galleryImages.img1} alt={destination.title} />
