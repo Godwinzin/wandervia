@@ -20,7 +20,7 @@ export default function Search() {
     }
   };
 
-  // Compute filtered destinations directly during render (No useEffect needed!)
+  // Compute filtered destinations directly during render 
   const filteredDestinations = MOCK_DESTINATIONS.filter(item => {
     const matchesSearch = !searchQuery || 
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ToastContainer from './components/Toast';
-
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Search from './pages/Search';
 import Saved from './pages/Saved';
@@ -13,6 +13,7 @@ import Details from './pages/Details';
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop/>
       <div className="app-wrapper">
         <Navbar />
         <ToastContainer />

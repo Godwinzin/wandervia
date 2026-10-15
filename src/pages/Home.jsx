@@ -6,9 +6,8 @@ import { ShowToast } from '../components/Toast';
 
 export default function Home() {
   const [destinationQuery, setDestinationQuery] = useState('');
-  const [checkInDate, setCheckInDate] = useState('');
   
-  // Lazy initialization: Runs only once on mount, no useEffect needed!
+  // Lazy initialization for saved items
   const [savedIds, setSavedIds] = useState(() => {
     const saved = JSON.parse(localStorage.getItem('savedDestinations')) || [];
     return saved.map(item => item.id);
@@ -50,12 +49,6 @@ export default function Home() {
             value={destinationQuery}
             onChange={(e) => setDestinationQuery(e.target.value)}
             required 
-          />
-          <input 
-            type="date" 
-            id="date-input"
-            value={checkInDate}
-            onChange={(e) => setCheckInDate(e.target.value)}
           />
           <button type="submit" className="btn-primary">Search</button>
         </form>

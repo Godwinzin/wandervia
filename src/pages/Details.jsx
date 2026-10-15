@@ -13,7 +13,9 @@ export default function Details() {
   const id = searchParams.get('id') || '1';
   const destination = MOCK_DESTINATIONS.find(item => String(item.id) === String(id)) || MOCK_DESTINATIONS[0];
 
-  const [guests, setGuests] = useState(1);
+  // Guests tracked as a string to allow clearing/backspacing on mobile
+  const [guests, setGuests] = useState('1');
+  const numericGuests = Math.max(1, parseInt(guests) || 1);
   
   // Compute initial check-in date directly during render
   const [checkInDate] = useState(() => {
@@ -29,7 +31,7 @@ export default function Details() {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
-  const totalPrice = destination.price * Math.max(1, guests);
+  const totalPrice = destination.price * numericGuests;
 
   // Fetch Unsplash Images & Weather data
   useEffect(() => {
@@ -126,7 +128,7 @@ export default function Details() {
     bookings.push({
       id: destination.id,
       bookedAt: new Date().toLocaleDateString(),
-      guests: Number(guests),
+      guests: numericGuests,
       totalPrice: totalPrice
     });
 
@@ -178,7 +180,7 @@ export default function Details() {
         <div className="booking-widget">
           <h3>Reserve Your Spot</h3>
           <p className="card-price" id="widget-price" style={{ fontSize: '1.5rem', margin: '1rem 0' }}>
-            ${totalPrice} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'var(--gray)' }}>({guests} {guests > 1 ? 'guests' : 'guest'})</span>
+            ${totalPrice} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'var(--gray)' }}>({numericGuests} {numericGuests > 1 ? 'guests' : 'guest'})</span>
           </p>
 
           <form onSubmit={handleReserve} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -202,8 +204,14 @@ export default function Details() {
                 id="guests" 
                 min="1" 
                 max="10" 
+                inputMode="numeric"
                 value={guests}
-                onChange={(e) => setGuests(Math.max(1, parseInt(e.target.value) || 1))}
+                onChange={(e) => setGuests(e.target.value)}
+                onBlur={() => {
+                  if (!guests || parseInt(guests) < 1) {
+                    setGuests('1');
+                  }
+                }}
                 style={{ width: '100%', padding: '0.7rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
                 required 
               />
