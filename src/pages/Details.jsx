@@ -17,12 +17,15 @@ export default function Details() {
   const [guests, setGuests] = useState('1');
   const numericGuests = Math.max(1, parseInt(guests) || 1);
   
-  // Compute initial check-in date directly during render
-  const [checkInDate] = useState(() => {
+  // Calculate the minimum check-in date (5 days from today)
+  const minCheckInDate = (() => {
     const minDate = new Date();
     minDate.setDate(minDate.getDate() + 5);
     return minDate.toISOString().split('T')[0];
-  });
+  })();
+
+  // Track check-in date in state, defaulting to the 5-day minimum
+  const [checkInDate, setCheckInDate] = useState(minCheckInDate);
 
   const [galleryImages, setGalleryImages] = useState({ img1: destination.image, img2: destination.image });
   const [weatherData, setWeatherData] = useState(null);
@@ -128,6 +131,7 @@ export default function Details() {
     bookings.push({
       id: destination.id,
       bookedAt: new Date().toLocaleDateString(),
+      checkInDate: checkInDate,
       guests: numericGuests,
       totalPrice: totalPrice
     });
@@ -190,10 +194,10 @@ export default function Details() {
                 type="date" 
                 id="checkin" 
                 value={checkInDate}
-                min={checkInDate}
+                min={minCheckInDate}
+                onChange={(e) => setCheckInDate(e.target.value)}
                 style={{ width: '100%', padding: '0.7rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
                 required 
-                readOnly
               />
             </div>
 

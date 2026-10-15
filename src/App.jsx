@@ -9,6 +9,7 @@ import Search from './pages/Search';
 import Saved from './pages/Saved';
 import Bookings from './pages/Bookings';
 import Details from './pages/Details';
+import Legal from './pages/Legal';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/saved" element={<Saved />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/details" element={<Details />} />
+          <Route path="/legal" element={<Legal />} />
         </Routes>
 
         <Footer />
