@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_DESTINATIONS } from '../data/destinations';
 import DestinationCard from '../components/DestinationCard';
-import { ShowToast } from '../components/ToastContainer';
+import { ShowToast } from '../components/Toast';
 
 export default function Home() {
   const [destinationQuery, setDestinationQuery] = useState('');
