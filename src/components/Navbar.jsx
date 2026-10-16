@@ -1,9 +1,11 @@
-import { useState } from 'react';
+// src/components/Navbar.jsx
+import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navRef = useRef(null); // Reference to track clicks inside the navbar
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -13,8 +15,25 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  // Close menu when clicking anywhere outside of the navbar
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (isMobileMenuOpen && navRef.current && !navRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside); // For mobile touch support
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
-    <nav className="navbar">
+    <nav className="navbar" ref={navRef}>
       <NavLink to="/" className="logo-link" onClick={closeMenu}>
         <img src={logo} alt="Wandervia Logo" className="logo-img" />
         <span className="logo-text">Wandervia</span>
