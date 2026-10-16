@@ -7,10 +7,10 @@ import { ShowToast } from '../components/Toast';
 export default function Home() {
   const [destinationQuery, setDestinationQuery] = useState('');
   
-  // Lazy initialization for saved items
+  // Use 'favorites' for consistency across the app
   const [savedIds, setSavedIds] = useState(() => {
-    const saved = JSON.parse(localStorage.getItem('savedDestinations')) || [];
-    return saved.map(item => item.id);
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    return favorites; // Since favorites stores just IDs, or update if it stores objects
   });
 
   const navigate = useNavigate();
@@ -21,20 +21,20 @@ export default function Home() {
   };
 
   const handleToggleSave = (item) => {
-    let saved = JSON.parse(localStorage.getItem('savedDestinations')) || [];
-    const exists = saved.some(fav => fav.id === item.id);
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const exists = favorites.includes(item.id);
 
     if (exists) {
-      saved = saved.filter(fav => fav.id !== item.id);
-      setSavedIds(savedIds.filter(id => id !== item.id));
-      ShowToast(`Removed ${item.title} from saved`, 'info');
+      favorites = favorites.filter(favId => favId !== item.id);
+      setSavedIds(favorites);
+      ShowToast(`Removed "${item.title}" from favorites`, 'info');
     } else {
-      saved.push(item);
-      setSavedIds([...savedIds, item.id]);
-      ShowToast(`Added ${item.title} to saved!`, 'success');
+      favorites.push(item.id);
+      setSavedIds([...favorites]);
+      ShowToast(`Added "${item.title}" to favorites!`, 'success');
     }
 
-    localStorage.setItem('savedDestinations', JSON.stringify(saved));
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   };
 
   return (

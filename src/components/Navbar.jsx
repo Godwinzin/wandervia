@@ -44,8 +44,8 @@ export default function Navbar() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/saved" className={({ isActive }) => isActive ? 'navactive' : ''} onClick={closeMenu}>
-            Saved
+          <NavLink to="/favorites" className={({ isActive }) => isActive ? 'navactive' : ''} onClick={closeMenu}>
+            Favorites
           </NavLink>
         </li>
         <li>

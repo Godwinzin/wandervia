@@ -1,40 +1,17 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShowToast } from './Toast';
 
-export default function DestinationCard({ item, onFavoriteToggle }) {
+export default function DestinationCard({ item, isSaved, onToggleSave }) {
   const navigate = useNavigate();
-
-  // ✅ Use local state initialized from localStorage so it updates instantly
-  const [isFav, setIsFav] = useState(() => {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    return favorites.includes(item.id);
-  });
 
   const handleCardClick = () => {
     navigate(`/details?id=${item.id}`);
   };
 
   const handleFavoriteClick = (e) => {
-    e.stopPropagation(); // Prevent card click event from firing
+    e.stopPropagation(); // Prevent card click from triggering navigation
 
-    let updatedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    
-    if (updatedFavorites.includes(item.id)) {
-      updatedFavorites = updatedFavorites.filter(favId => favId !== item.id);
-      setIsFav(false); // ✅ Instantly update local state
-      ShowToast(`Removed "${item.title}" from saved favorites`, 'info');
-    } else {
-      updatedFavorites.push(item.id);
-      setIsFav(true); // ✅ Instantly update local state
-      ShowToast(`Added "${item.title}" to saved favorites!`, 'success');
-    }
-
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-
-    // Notify parent component if a callback was passed (useful for Saved page re-rendering)
-    if (onFavoriteToggle) {
-      onFavoriteToggle();
+    if (onToggleSave) {
+      onToggleSave(item);
     }
   };
 
@@ -51,9 +28,10 @@ export default function DestinationCard({ item, onFavoriteToggle }) {
           }}
         />
         <button 
-          className={`fav-btn ${isFav ? 'active' : ''}`} 
+          className={`fav-btn ${isSaved ? 'active' : ''}`} 
           onClick={handleFavoriteClick} 
-          title="Save to Favorites"
+          title={isSaved ? "Remove from Favorites" : "Save to Favorites"}
+          aria-label={isSaved ? "Remove from Favorites" : "Save to Favorites"}
         >
           ♥
         </button>

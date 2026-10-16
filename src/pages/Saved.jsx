@@ -1,31 +1,38 @@
-// src/pages/Saved.jsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MOCK_DESTINATIONS } from '../data/destinations';
 import DestinationCard from '../components/DestinationCard';
+import { ShowToast } from '../components/Toast';
 
 export default function Saved() {
-  // State to trigger re-renders when favorites are modified
   const [, setRefreshKey] = useState(0);
 
+  // Read favorite IDs from localStorage using the 'favorites' key
   const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
   const savedItems = MOCK_DESTINATIONS.filter(item => favorites.includes(item.id));
 
-  const handleFavoriteToggle = () => {
-    // Force component re-render when a favorite is toggled
+  const handleToggleSave = (item) => {
+    let currentFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    currentFavorites = currentFavorites.filter(favId => favId !== item.id);
+    
+    localStorage.setItem('favorites', JSON.stringify(currentFavorites));
+    ShowToast(`Removed "${item.title}" from favorites`, 'info');
+    
+    // Force component re-render so the card disappears from the grid immediately
     setRefreshKey(prev => prev + 1);
   };
 
   return (
     <main className="container">
-      <h2 className="section-title">Saved Favorites</h2>
+      <h2 className="section-title">Favorite Destinations</h2>
       <div className="grid" id="saved-results">
         {savedItems.length > 0 ? (
           savedItems.map(item => (
             <DestinationCard 
               key={item.id} 
               item={item} 
-              onFavoriteToggle={handleFavoriteToggle} 
+              isSaved={true} // Everything on the Saved page is a favorite
+              onToggleSave={handleToggleSave} 
             />
           ))
         ) : (
